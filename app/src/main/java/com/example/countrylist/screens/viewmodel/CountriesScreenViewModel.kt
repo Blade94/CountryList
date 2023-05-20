@@ -12,11 +12,15 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class CountriesScreenViewModel @Inject constructor(private val repository: CountryRepository) :ViewModel() {
+class CountriesScreenViewModel @Inject constructor(private val repository: CountryRepository) :
+    ViewModel() {
 
-    val countries: MutableState<DataWrapper<ArrayList<CountryItem>, Boolean, Exception>> = mutableStateOf(DataWrapper(null, false, null))
-    //TODO aggiungere set per salvare le lingue
-    //TODO aggiungere set per salvare le regioni (continenti)
+    val countries: MutableState<DataWrapper<ArrayList<CountryItem>, Boolean, Exception>> =
+        mutableStateOf(DataWrapper(null, false, null))
+    val countriesByLang: MutableState<DataWrapper<ArrayList<CountryItem>, Boolean, Exception>> =
+        mutableStateOf(DataWrapper(null, false, null))
+    val countriesByRegion: MutableState<DataWrapper<ArrayList<CountryItem>, Boolean, Exception>> =
+        mutableStateOf(DataWrapper(null, false, null))
 
     init {
         getAllCountries()
@@ -24,11 +28,19 @@ class CountriesScreenViewModel @Inject constructor(private val repository: Count
 
     private fun getAllCountries() {
         viewModelScope.launch {
-            countries.value.loading = true
             countries.value = repository.getAllCountries()
-            if (countries.value.data.toString().isNotEmpty()) {
-                countries.value.loading = false
-            }
+        }
+    }
+
+    fun getCountriesByLanguage(lang: String) {
+        viewModelScope.launch {
+            countriesByLang.value = repository.getCountryByLang(lang)
+        }
+    }
+
+    fun getCountriesByRegion(region: String) {
+        viewModelScope.launch {
+            countriesByRegion.value = repository.getCountryByRegion(region)
         }
     }
 

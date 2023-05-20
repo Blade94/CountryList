@@ -18,11 +18,7 @@ class CountryDetailsScreenViewModel @Inject constructor(private val repository: 
 
     fun getSelectedCountry(name: String) {
         viewModelScope.launch {
-            selectedCountry.value.loading = true
             selectedCountry.value = repository.getCountryByName(name)
-            if (selectedCountry.value.data.toString().isNotEmpty()) {
-                selectedCountry.value.loading = false
-            }
         }
     }
 

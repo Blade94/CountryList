@@ -14,4 +14,10 @@ interface CountriesAPI {
     @GET("name/{name}?fullText=true")
     suspend fun getCountryByName(@Path("name") name: String): Country
 
+    @GET("lang/{currency}")
+    suspend fun getCountryByLanguage(@Path("currency") currency: String): Country
+
+    @GET("region/{region}")
+    suspend fun getCountryByRegion(@Path("region") region: String): Country
+
 }

@@ -3,15 +3,14 @@ package com.example.countrylist.screens
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -22,11 +21,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.countrylist.navigation.CountriesScreens
 import com.example.countrylist.screens.viewmodel.CountriesScreenViewModel
+import com.example.countrylist.ui.component.CountryListCard
+import com.example.countrylist.ui.component.SearchTextField
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalComposeUiApi::class)
 @Composable
@@ -58,39 +57,22 @@ fun CountrySearchScreen(
                 .padding(it)
                 .fillMaxWidth()
         ) {
-            OutlinedTextField(
-                modifier = Modifier
-                    .padding(16.dp)
-                    .fillMaxWidth(),
-                value = textFieldState.value,
-                label = {
-                    Text(text = "Filter by language or continent")
-                },
-                onValueChange = { string ->
-                    textFieldState.value = string
-                },
-                singleLine = true,
-                keyboardActions = KeyboardActions {
-                    if (!validState) return@KeyboardActions
-                    textFieldState.value.trim()
-                    //TODO chiamare api di ricerca
-                    keyboardController?.hide()
-                },
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Text,
-                    imeAction = ImeAction.Search
-                )
-            )
-            //TODO modificare condizione su un'altro booleano che scatta al click su ricerca
-            if (textFieldState.value.isNotEmpty()) {
-                Text(text = "is not void!")
-//                LazyColumn(modifier = Modifier.padding(it)) {
-//                    items(items = countriesScreenViewModel.countries.value.data!!.toList()) { country ->
-//                        CountryListCard(country = country) { countryName ->
-//                            navController.navigate(CountriesScreens.CountryDetailsScreen.name + "/$countryName")
-//                        }
-//                    }
-//                }
+            SearchTextField(
+                textFieldState = textFieldState,
+                validState = validState,
+                keyboardController = keyboardController
+            ) { langOrContinent ->
+                countriesScreenViewModel.getCountriesByLanguage(langOrContinent)
+//                countriesScreenViewModel.getCountriesByRegion(langOrContinent)
+            }
+            LazyColumn {
+                items(
+                    items = countriesScreenViewModel.countriesByLang.value.data ?: emptyList()
+                ) { country ->
+                    CountryListCard(country = country) { countryName ->
+                        navController.navigate(CountriesScreens.CountryDetailsScreen.name + "/$countryName")
+                    }
+                }
             }
         }
     }
