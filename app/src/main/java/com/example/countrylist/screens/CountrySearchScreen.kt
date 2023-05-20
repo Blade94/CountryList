@@ -63,11 +63,11 @@ fun CountrySearchScreen(
                 keyboardController = keyboardController
             ) { langOrContinent ->
                 countriesScreenViewModel.getCountriesByLanguage(langOrContinent)
-//                countriesScreenViewModel.getCountriesByRegion(langOrContinent)
+                countriesScreenViewModel.getCountriesByRegion(langOrContinent)
             }
             LazyColumn {
                 items(
-                    items = countriesScreenViewModel.countriesByLang.value.data ?: emptyList()
+                    items = countriesScreenViewModel.countriesByLang.value.data ?: countriesScreenViewModel.countriesByRegion.value.data ?: emptyList()
                 ) { country ->
                     CountryListCard(country = country) { countryName ->
                         navController.navigate(CountriesScreens.CountryDetailsScreen.name + "/$countryName")
