@@ -22,14 +22,14 @@ import coil.compose.AsyncImage
 import com.example.countrylist.model.CountryItem
 
 @Composable
-fun CountryListCard(country: CountryItem) {
+fun CountryListCard(country: CountryItem, onClick: (String) -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .size(100.dp)
             .padding(8.dp)
             .clickable {
-                       //TODO fare la navigazione verso details
+                onClick(country.name.common)
             },
         elevation = CardDefaults.cardElevation(4.dp)
     ) {
