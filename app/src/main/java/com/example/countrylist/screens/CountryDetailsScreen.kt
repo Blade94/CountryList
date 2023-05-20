@@ -36,17 +36,18 @@ fun CountryDetailsScreen(
         viewModel.getSelectedCountry(name = countryName)
     }
 
-    Scaffold() {
+    Scaffold(topBar = {
+        TopAppBar(
+            title = { Text(text = countryName ?: "") },
+            navigationIcon = {
+                IconButton(onClick = { navController.popBackStack() }) {
+                    Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "back")
+                }
+            },
+            colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
+        )
+    }) {
         Column(modifier = Modifier.padding(it)) {
-            TopAppBar(
-                title = { Text(text = countryName ?: "") },
-                navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "back")
-                    }
-                },
-                colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
-            )
             if (!viewModel.selectedCountry.value.data.isNullOrEmpty()) {
                 Surface(modifier = Modifier.fillMaxSize()) {
                     Column {

@@ -37,7 +37,7 @@ fun CountriesScreen(
         TopAppBar(
             title = { Text(text = "Country List") },
             actions = {
-                IconButton(onClick = { /*TODO fare la funzionalità di ricerca*/ }) {
+                IconButton(onClick = { navController.navigate(CountriesScreens.CountrySearchScreen.name) }) {
                     Icon(imageVector = Icons.Default.Search, contentDescription = "Search")
                 }
             },
@@ -54,7 +54,9 @@ fun CountriesScreen(
             }
         } else {
             Column(
-                modifier = Modifier.padding(it).fillMaxSize(),
+                modifier = Modifier
+                    .padding(it)
+                    .fillMaxSize(),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Center
             ) {

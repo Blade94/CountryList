@@ -11,6 +11,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.countrylist.screens.CountriesScreen
 import com.example.countrylist.screens.CountryDetailsScreen
+import com.example.countrylist.screens.CountrySearchScreen
 import com.example.countrylist.screens.viewmodel.CountriesScreenViewModel
 import com.example.countrylist.screens.viewmodel.CountryDetailsScreenViewModel
 
@@ -31,6 +32,10 @@ fun CountriesNavigation() {
         ) {
             val countryDetailsViewModel = hiltViewModel<CountryDetailsScreenViewModel>()
             CountryDetailsScreen(navController, it.arguments?.getString("name"), countryDetailsViewModel)
+        }
+        composable(route = CountriesScreens.CountrySearchScreen.name) {
+            val countriesScreenViewModel = hiltViewModel<CountriesScreenViewModel>()
+            CountrySearchScreen(navController, countriesScreenViewModel)
         }
     }
 }
